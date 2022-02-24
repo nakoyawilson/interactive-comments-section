@@ -31,9 +31,11 @@ html {
 
 body {
   background-color: var(--very-light-gray);
+  color: var(--graysih-blue);
   font-family: var(--font);
   font-size: 1.6rem;
   font-weight: 400;
+  line-height: 1.5;
 }
 
 img {
@@ -73,8 +75,18 @@ button {
   margin-left: 1.75rem;
 }
 
+.add-comment {
+  position: relative;
+}
+
 .reply-form {
   display: none;
+}
+
+.details-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
 }
 
 .avatar {
@@ -82,11 +94,105 @@ button {
 }
 
 .username {
+  color: var(--dark-blue);
   font-weight: 500;
+}
+
+.paragraph {
+  margin: 2rem 0;
 }
 
 .replying-to {
   color: var(--moderate-blue);
+}
+
+.interactive-components-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--very-light-gray);
+  padding: 1.5rem;
+  width: 10rem;
+  border-radius: 10px;
+}
+
+.score {
+  color: var(--moderate-blue);
+  display: block;
+  font-weight: 500;
+}
+
+.crud-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+}
+
+.btn {
+  background-color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font: inherit;
+  font-weight: 500;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-reply,
+.btn-edit {
+  color: var(--moderate-blue);
+}
+
+.btn-delete {
+  color: var(--soft-red);
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+.textarea {
+  font: inherit;
+  padding: 1.75rem 2.25rem;
+  border: 1px solid var(--light-gray);
+  border-radius: 10px;
+  height: 9.5rem;
+}
+
+::placeholder {
+  font: inherit;
+  opacity: 1;
+}
+
+.send {
+  background-color: var(--moderate-blue);
+  color: var(--white);
+  text-transform: uppercase;
+  width: 10.5rem;
+  align-self: flex-end;
+  padding: 1.6rem 0;
+  border-radius: 10px;
+}
+
+.send:hover {
+  cursor: pointer;
+}
+
+.avatar-wrapper {
+  position: absolute;
+  bottom: 2.25rem;
 }
 
 /* Footer Styles */
@@ -102,7 +208,7 @@ button {
 
 /* Media Queries */
 
-@media screen and (min-width: 375px) {
+@media screen and (min-width: 376px) {
   /* Main Styles */
 
   .main {
