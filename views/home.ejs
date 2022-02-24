@@ -16,6 +16,9 @@
 
     <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
     <style>
+      div {
+        border: 2px solid red;
+      }
       .attribution {
         font-size: 11px;
         text-align: center;
@@ -27,6 +30,118 @@
   </head>
   <body>
     <!-- Pull dynamic content from the data.json file -->
+    <% comments.forEach(comment => {%>
+    <div>
+      <button><img src="./images/icon-plus.svg" alt="" /></button>
+      <div><%= comment.score %></div>
+      <button><img src="./images/icon-minus.svg" alt="" /></button>
+      <div>
+        <img src="<%= comment.user.image.png %>" alt="" />
+        <span><%= comment.user.username %></span>
+        <span><%= comment.createdAt %></span>
+        <% if (currentUser.username === comment.user.username) {%>
+        <form action="/delete/<%= comment._id %>?_method=DELETE" method="POST">
+          <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+        </form>
+        <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
+        <% } else { %>
+        <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
+        <% } %>
+      </div>
+      <p><%= comment.content %></p>
+    </div>
+    <% if (currentUser.username === comment.user.username) {%>
+    <div>
+      <form
+        action="/edit/<%= comment._id %>?_method=PATCH"
+        method="POST"
+        name="editComment"
+      >
+        <img src="<%= currentUser.image.png %>" alt="" />
+        <label for="editComment<%= comment._id %>">Add a comment...</label>
+        <textarea
+          placeholder="Add a comment..."
+          id="editComment<%= comment._id %>"
+          name="commentContent"
+        >
+<%= comment.content %></textarea
+        >
+        <button type="submit">Send</button>
+        <input
+          type="hidden"
+          name="currentUser"
+          value="<%= JSON.stringify(currentUser) %>"
+        />
+        <input type="hidden" name="formName" value="editComment" />
+      </form>
+    </div>
+    <% }%> <% comment.replies.forEach(reply => {%>
+    <div>
+      <button><img src="./images/icon-plus.svg" alt="" /></button>
+      <div><%= reply.score %></div>
+      <button><img src="./images/icon-minus.svg" alt="" /></button>
+      <div>
+        <img src="<%= reply.user.image.png %>" alt="" />
+        <span><%= reply.user.username %></span>
+        <span><%= reply.createdAt %></span>
+        <% if (currentUser.username === reply.user.username) {%>
+        <form
+          action="/delete/<%= reply.user.id %>?_method=DELETE"
+          method="POST"
+        >
+          <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+        </form>
+        <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
+        <% } else { %>
+        <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
+        <% } %>
+      </div>
+      <p><span>@<%= reply.replyingTo %></span> <%= reply.content %></p>
+    </div>
+    <% if (currentUser.username === reply.user.username) {%>
+    <div>
+      <form
+        action="/edit/<%= reply.id %>?_method=PATCH"
+        method="POST"
+        name="editReply"
+      >
+        <img src="<%= currentUser.image.png %>" alt="" />
+        <label for="editReply<%= reply.id %>">Add a comment...</label>
+        <textarea
+          placeholder="Add a comment..."
+          id="editReply<%= reply.id %>"
+          name="commentContent"
+        >
+<%= reply.content %></textarea
+        >
+        <button type="submit">Send</button>
+        <input
+          type="hidden"
+          name="currentUser"
+          value="<%= JSON.stringify(currentUser) %>"
+        />
+        <input type="hidden" name="formName" value="editReply" />
+      </form>
+    </div>
+    <% }%> <% })%> <% })%>
+    <div>
+      <img src="<%= currentUser.image.png %>" alt="" />
+      <form action="/add" method="POST" name="addComment">
+        <label for="addComment">Add a comment...</label>
+        <textarea
+          placeholder="Add a comment..."
+          id="addComment"
+          name="commentContent"
+        ></textarea>
+        <button type="submit">Send</button>
+        <input
+          type="hidden"
+          name="currentUser"
+          value="<%= JSON.stringify(currentUser) %>"
+        />
+        <input type="hidden" name="formName" value="addComment" />
+      </form>
+    </div>
 
     <div class="attribution">
       Challenge by
