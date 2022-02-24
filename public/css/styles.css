@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
+
+:root {
+  --font: "Rubik", sans-serif;
+  --moderate-blue: hsl(238, 40%, 52%);
+  --soft-red: hsl(358, 79%, 66%);
+  --light-grayish-blue: hsl(239, 57%, 85%);
+  --pale-red: hsl(357, 100%, 86%);
+  --dark-blue: hsl(212, 24%, 26%);
+  --graysih-blue: hsl(211, 10%, 45%);
+  --light-gray: hsl(223, 19%, 93%);
+  --very-light-gray: hsl(228, 33%, 97%);
+  --white: hsl(0, 0%, 100%);
+}
+
+/* CSS Reset */
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* General Styles */
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background-color: var(--very-light-gray);
+  font-family: var(--font);
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+img {
+  display: block;
+}
+
+button {
+  border: none;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Main Styles */
+
+.main {
+  width: min(92%, 63rem);
+  margin: 3.25rem auto;
+}
+
+.card {
+  background-color: var(--white);
+  border-radius: 10px;
+  margin-bottom: 1.6rem;
+  padding: 1.75rem;
+}
+
+.reply {
+  margin-left: 1.75rem;
+}
+
+.reply-form {
+  display: none;
+}
+
+.avatar {
+  width: 3.2rem;
+}
+
+.username {
+  font-weight: 500;
+}
+
+.replying-to {
+  color: var(--moderate-blue);
+}
+
+/* Footer Styles */
+
+.attribution {
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.attribution a {
+  color: var(--moderate-blue);
+}
+
+/* Media Queries */
+
+@media screen and (min-width: 375px) {
+  /* Main Styles */
+
+  .main {
+    margin: 6.5rem auto;
+  }
+
+  .reply {
+    margin-left: 9rem;
+  }
+}

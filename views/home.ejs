@@ -14,119 +14,60 @@
 
     <title>Frontend Mentor | Interactive comments section</title>
 
-    <!-- Feel free to remove these styles or customise in your own stylesheet 👍 -->
-    <style>
-      div {
-        border: 2px solid red;
-      }
-      .attribution {
-        font-size: 11px;
-        text-align: center;
-      }
-      .attribution a {
-        color: hsl(228, 45%, 44%);
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
   </head>
   <body>
-    <% comments.forEach(comment => {%>
-    <div>
-      <button><img src="./images/icon-plus.svg" alt="" /></button>
-      <div><%= comment.score %></div>
-      <button><img src="./images/icon-minus.svg" alt="" /></button>
-      <div>
-        <img src="<%= comment.user.image.png %>" alt="" />
-        <span><%= comment.user.username %></span>
-        <span><%= comment.createdAt %></span>
-        <% if (currentUser.username === comment.user.username) {%>
-        <form
-          action="/delete/<%= comment._id %>?_method=DELETE"
-          method="POST"
-          name="deleteComment"
-        >
-          <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
-          <input type="hidden" name="formName" value="deleteComment" />
-        </form>
-        <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
-        <% } else { %>
-        <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
-        <% } %>
+    <header>
+      <h1 class="visually-hidden">Interactive comments section</h1>
+    </header>
+    <main class="main">
+      <% comments.forEach(comment => {%>
+      <div class="card comment">
+        <button><img src="./images/icon-plus.svg" alt="" /></button>
+        <div><%= comment.score %></div>
+        <button><img src="./images/icon-minus.svg" alt="" /></button>
+        <div>
+          <img src="<%= comment.user.image.png %>" alt="" class="avatar" />
+          <span class="username"><%= comment.user.username %></span>
+          <span><%= comment.createdAt %></span>
+          <% if (currentUser.username === comment.user.username) {%>
+          <form
+            action="/delete/<%= comment._id %>?_method=DELETE"
+            method="POST"
+            name="deleteComment"
+          >
+            <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+            <input type="hidden" name="formName" value="deleteComment" />
+          </form>
+          <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
+          <% } else { %>
+          <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
+          <% } %>
+        </div>
+        <p><%= comment.content %></p>
       </div>
-      <p><%= comment.content %></p>
-    </div>
-    <div>
-      <img src="<%= currentUser.image.png %>" alt="" />
-      <form action="/add" method="POST" name="addReply">
-        <label for="addReply">Add a reply...</label>
-        <textarea
-          placeholder="Add a reply..."
-          id="addReply"
-          name="commentContent"
-        ></textarea>
-        <button type="submit">Send</button>
-        <input
-          type="hidden"
-          name="currentUser"
-          value="<%= JSON.stringify(currentUser) %>"
-        />
-        <input type="hidden" name="formName" value="addReply" />
-        <input
-          type="hidden"
-          name="replyingTo"
-          value="<%= comment.user.username
+      <div class="card reply reply-form">
+        <img src="<%= currentUser.image.png %>" alt="" class="avatar" />
+        <form action="/add" method="POST" name="addReply">
+          <label for="addReply" class="visually-hidden">Add a reply...</label>
+          <textarea
+            placeholder="Add a reply..."
+            id="addReply"
+            name="commentContent"
+          ></textarea>
+          <button type="submit">Send</button>
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= JSON.stringify(currentUser) %>"
+          />
+          <input type="hidden" name="formName" value="addReply" />
+          <input
+            type="hidden"
+            name="replyingTo"
+            value="<%= comment.user.username
         %>"
-        />
-        <input
-          type="hidden"
-          name="commentId"
-          value="<%= comment._id
-        %>"
-        />
-      </form>
-    </div>
-    <% if (currentUser.username === comment.user.username) {%>
-    <div>
-      <form
-        action="/edit/<%= comment._id %>?_method=PATCH"
-        method="POST"
-        name="editComment"
-      >
-        <img src="<%= currentUser.image.png %>" alt="" />
-        <label for="editComment<%= comment._id %>">Edit a comment...</label>
-        <textarea
-          placeholder="Edit a comment..."
-          id="editComment<%= comment._id %>"
-          name="commentContent"
-        >
-<%= comment.content %></textarea
-        >
-        <button type="submit">Send</button>
-        <input
-          type="hidden"
-          name="currentUser"
-          value="<%= JSON.stringify(currentUser) %>"
-        />
-        <input type="hidden" name="formName" value="editComment" />
-      </form>
-    </div>
-    <% }%> <% comment.replies.forEach(reply => {%>
-    <div>
-      <button><img src="./images/icon-plus.svg" alt="" /></button>
-      <div><%= reply.reply.score %></div>
-      <button><img src="./images/icon-minus.svg" alt="" /></button>
-      <div>
-        <img src="<%= reply.reply.user.image.png %>" alt="" />
-        <span><%= reply.reply.user.username %></span>
-        <span><%= reply.reply.createdAt %></span>
-        <% if (currentUser.username === reply.reply.user.username) {%>
-        <form
-          action="/delete/<%= reply.reply._id %>?_method=DELETE"
-          method="POST"
-          name="deleteReply"
-        >
-          <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
-          <input type="hidden" name="formName" value="deleteReply" />
-          <input type="hidden" name="arrayId" value="<%= reply.id %>" />
+          />
           <input
             type="hidden"
             name="commentId"
@@ -134,64 +75,128 @@
         %>"
           />
         </form>
-        <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
-        <% } else { %>
-        <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
-        <% } %>
       </div>
-      <p>
-        <span>@<%= reply.reply.replyingTo %></span> <%= reply.reply.content %>
-      </p>
-    </div>
-    <% if (currentUser.username === reply.reply.user.username) {%>
-    <div>
-      <form
-        action="/edit/<%= reply.reply._id %>?_method=PATCH"
-        method="POST"
-        name="editReply"
-      >
-        <img src="<%= currentUser.image.png %>" alt="" />
-        <label for="editReply<%= reply.reply._id %>">Edit a reply...</label>
-        <textarea
-          placeholder="Edit a reply..."
-          id="editReply<%= reply.reply._id %>"
-          name="commentContent"
+      <% if (currentUser.username === comment.user.username) {%>
+      <div class="card comment">
+        <form
+          action="/edit/<%= comment._id %>?_method=PATCH"
+          method="POST"
+          name="editComment"
         >
+          <img src="<%= currentUser.image.png %>" alt="" class="avatar" />
+          <label for="editComment<%= comment._id %>" class="visually-hidden"
+            >Edit a comment...</label
+          >
+          <textarea
+            placeholder="Edit a comment..."
+            id="editComment<%= comment._id %>"
+            name="commentContent"
+          >
+<%= comment.content %></textarea
+          >
+          <button type="submit">Send</button>
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= JSON.stringify(currentUser) %>"
+          />
+          <input type="hidden" name="formName" value="editComment" />
+        </form>
+      </div>
+      <% }%> <% comment.replies.forEach(reply => {%>
+      <div class="card reply">
+        <button><img src="./images/icon-plus.svg" alt="" /></button>
+        <div><%= reply.reply.score %></div>
+        <button><img src="./images/icon-minus.svg" alt="" /></button>
+        <div>
+          <img src="<%= reply.reply.user.image.png %>" alt="" class="avatar" />
+          <span class="username"><%= reply.reply.user.username %></span>
+          <span><%= reply.reply.createdAt %></span>
+          <% if (currentUser.username === reply.reply.user.username) {%>
+          <form
+            action="/delete/<%= reply.reply._id %>?_method=DELETE"
+            method="POST"
+            name="deleteReply"
+          >
+            <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+            <input type="hidden" name="formName" value="deleteReply" />
+            <input type="hidden" name="arrayId" value="<%= reply.id %>" />
+            <input
+              type="hidden"
+              name="commentId"
+              value="<%= comment._id
+        %>"
+            />
+          </form>
+          <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
+          <% } else { %>
+          <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
+          <% } %>
+        </div>
+        <p>
+          <span class="username replying-to"
+            >@<%= reply.reply.replyingTo %></span
+          >
+          <%= reply.reply.content %>
+        </p>
+      </div>
+      <% if (currentUser.username === reply.reply.user.username) {%>
+      <div class="card reply reply-form">
+        <form
+          action="/edit/<%= reply.reply._id %>?_method=PATCH"
+          method="POST"
+          name="editReply"
+        >
+          <img src="<%= currentUser.image.png %>" alt="" class="avatar" />
+          <label for="editReply<%= reply.reply._id %>" class="visually-hidden"
+            >Edit a reply...</label
+          >
+          <textarea
+            placeholder="Edit a reply..."
+            id="editReply<%= reply.reply._id %>"
+            name="commentContent"
+          >
 <%= reply.reply.content %></textarea
-        >
-        <button type="submit">Send</button>
-        <input
-          type="hidden"
-          name="currentUser"
-          value="<%= JSON.stringify(currentUser) %>"
-        />
-        <input type="hidden" name="formName" value="editReply" />
-      </form>
-    </div>
-    <% }%> <% })%> <% })%>
-    <div>
-      <img src="<%= currentUser.image.png %>" alt="" />
-      <form action="/add" method="POST" name="addComment">
-        <label for="addComment">Add a comment...</label>
-        <textarea
-          placeholder="Add a comment..."
-          id="addComment"
-          name="commentContent"
-        ></textarea>
-        <button type="submit">Send</button>
-        <input
-          type="hidden"
-          name="currentUser"
-          value="<%= JSON.stringify(currentUser) %>"
-        />
-        <input type="hidden" name="formName" value="addComment" />
-      </form>
-    </div>
-    <div class="attribution">
-      Challenge by
-      <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
-        >Frontend Mentor</a
-      >. Coded by <a href="https://nakoyawilson.netlify.app/">Nakoya Wilson</a>.
-    </div>
+          >
+          <button type="submit">Send</button>
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= JSON.stringify(currentUser) %>"
+          />
+          <input type="hidden" name="formName" value="editReply" />
+        </form>
+      </div>
+      <% }%> <% })%> <% })%>
+      <div class="card comment">
+        <img src="<%= currentUser.image.png %>" alt="" class="avatar" />
+        <form action="/add" method="POST" name="addComment">
+          <label for="addComment" class="visually-hidden"
+            >Add a comment...</label
+          >
+          <textarea
+            placeholder="Add a comment..."
+            id="addComment"
+            name="commentContent"
+          ></textarea>
+          <button type="submit">Send</button>
+          <input
+            type="hidden"
+            name="currentUser"
+            value="<%= JSON.stringify(currentUser) %>"
+          />
+          <input type="hidden" name="formName" value="addComment" />
+        </form>
+      </div>
+    </main>
+    <footer>
+      <p class="attribution">
+        Challenge by
+        <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
+          >Frontend Mentor</a
+        >. Coded by
+        <a href="https://nakoyawilson.netlify.app/">Nakoya Wilson</a>.
+      </p>
+    </footer>
   </body>
 </html>
