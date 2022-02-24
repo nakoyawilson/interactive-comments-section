@@ -5,7 +5,6 @@ const methodOverride = require("method-override");
 const Comment = require("./models/comment");
 const Reply = require("./models/reply");
 const data = require("./data.json");
-const { populate } = require("./models/comment");
 
 mongoose.connect("mongodb://localhost:27017/comment_tracker");
 
@@ -29,8 +28,7 @@ app.use(methodOverride("_method"));
 
 app.get("/", async (req, res) => {
   const currentUser = data.currentUser;
-  const comments = await Comment.find({}).populate("replies");
-  res.send({ comments });
+  const comments = await Comment.find({}).populate("replies.reply");
   res.render("home", { currentUser, comments });
 });
 
@@ -39,14 +37,31 @@ app.post("/add", async (req, res) => {
   const currentUserData = JSON.parse(req.body.currentUser);
   const commentContent = req.body.commentContent;
   const currentTime = new Date().toLocaleTimeString();
-  const newComment = new Comment({
-    content: commentContent,
-    createdAt: currentTime,
-    score: 0,
-    user: currentUserData,
-    replies: [],
-  });
-  await newComment.save();
+  if (formName === "addComment") {
+    const newComment = new Comment({
+      content: commentContent,
+      createdAt: currentTime,
+      score: 0,
+      user: currentUserData,
+      replies: [],
+    });
+    await newComment.save();
+  } else if (formName === "addReply") {
+    const commentId = req.body.commentId;
+    const replyingTo = req.body.replyingTo;
+    const newReply = new Reply({
+      content: commentContent,
+      createdAt: currentTime,
+      score: 0,
+      replyingTo: replyingTo,
+      user: currentUserData,
+    });
+    await newReply.save();
+    const replyToAdd = { reply: newReply._id };
+    const commentToUpdate = await Comment.findById(commentId);
+    commentToUpdate.replies.push(replyToAdd);
+    await commentToUpdate.save();
+  }
   res.redirect(req.get("referer"));
 });
 
@@ -59,15 +74,26 @@ app.patch("/edit/:id", async (req, res) => {
       content: updatedComment,
     });
   } else if (formName === "editReply") {
-    const reply = Reply.findOne({ _id: id });
-    res.send(reply);
+    await Reply.findByIdAndUpdate(id, {
+      content: updatedComment,
+    });
   }
   res.redirect(req.get("referer"));
 });
 
 app.delete("/delete/:id", async (req, res) => {
+  const formName = req.body.formName;
   const { id } = req.params;
-  await Comment.findByIdAndDelete(id);
+  if (formName === "deleteComment") {
+    await Comment.findByIdAndDelete(id);
+  } else if (formName === "deleteReply") {
+    const commentId = req.body.commentId;
+    const arrayId = req.body.arrayId;
+    await Reply.findByIdAndDelete(id);
+    const commentToUpdate = await Comment.findById(commentId);
+    commentToUpdate.replies.pull(arrayId);
+    await commentToUpdate.save();
+  }
   res.redirect(req.get("referer"));
 });
 

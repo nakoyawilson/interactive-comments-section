@@ -11,7 +11,7 @@ const CommentSchema = new mongoose.Schema({
     },
     username: String,
   },
-  replies: [{ type: [mongoose.Schema.Types.ObjectId], ref: "Reply" }],
+  replies: [{ reply: { type: mongoose.Schema.Types.ObjectId, ref: "Reply" } }],
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);

@@ -29,7 +29,6 @@
     </style>
   </head>
   <body>
-    <!-- Pull dynamic content from the data.json file -->
     <% comments.forEach(comment => {%>
     <div>
       <button><img src="./images/icon-plus.svg" alt="" /></button>
@@ -40,8 +39,13 @@
         <span><%= comment.user.username %></span>
         <span><%= comment.createdAt %></span>
         <% if (currentUser.username === comment.user.username) {%>
-        <form action="/delete/<%= comment._id %>?_method=DELETE" method="POST">
+        <form
+          action="/delete/<%= comment._id %>?_method=DELETE"
+          method="POST"
+          name="deleteComment"
+        >
           <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+          <input type="hidden" name="formName" value="deleteComment" />
         </form>
         <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
         <% } else { %>
@@ -49,6 +53,36 @@
         <% } %>
       </div>
       <p><%= comment.content %></p>
+    </div>
+    <div>
+      <img src="<%= currentUser.image.png %>" alt="" />
+      <form action="/add" method="POST" name="addReply">
+        <label for="addReply">Add a reply...</label>
+        <textarea
+          placeholder="Add a reply..."
+          id="addReply"
+          name="commentContent"
+        ></textarea>
+        <button type="submit">Send</button>
+        <input
+          type="hidden"
+          name="currentUser"
+          value="<%= JSON.stringify(currentUser) %>"
+        />
+        <input type="hidden" name="formName" value="addReply" />
+        <input
+          type="hidden"
+          name="replyingTo"
+          value="<%= comment.user.username
+        %>"
+        />
+        <input
+          type="hidden"
+          name="commentId"
+          value="<%= comment._id
+        %>"
+        />
+      </form>
     </div>
     <% if (currentUser.username === comment.user.username) {%>
     <div>
@@ -58,9 +92,9 @@
         name="editComment"
       >
         <img src="<%= currentUser.image.png %>" alt="" />
-        <label for="editComment<%= comment._id %>">Add a comment...</label>
+        <label for="editComment<%= comment._id %>">Edit a comment...</label>
         <textarea
-          placeholder="Add a comment..."
+          placeholder="Edit a comment..."
           id="editComment<%= comment._id %>"
           name="commentContent"
         >
@@ -78,41 +112,52 @@
     <% }%> <% comment.replies.forEach(reply => {%>
     <div>
       <button><img src="./images/icon-plus.svg" alt="" /></button>
-      <div><%= reply.score %></div>
+      <div><%= reply.reply.score %></div>
       <button><img src="./images/icon-minus.svg" alt="" /></button>
       <div>
-        <img src="<%= reply.user.image.png %>" alt="" />
-        <span><%= reply.user.username %></span>
-        <span><%= reply.createdAt %></span>
-        <% if (currentUser.username === reply.user.username) {%>
+        <img src="<%= reply.reply.user.image.png %>" alt="" />
+        <span><%= reply.reply.user.username %></span>
+        <span><%= reply.reply.createdAt %></span>
+        <% if (currentUser.username === reply.reply.user.username) {%>
         <form
-          action="/delete/<%= reply.user.id %>?_method=DELETE"
+          action="/delete/<%= reply.reply._id %>?_method=DELETE"
           method="POST"
+          name="deleteReply"
         >
           <button><img src="./images/icon-delete.svg" alt="" />Delete</button>
+          <input type="hidden" name="formName" value="deleteReply" />
+          <input type="hidden" name="arrayId" value="<%= reply.id %>" />
+          <input
+            type="hidden"
+            name="commentId"
+            value="<%= comment._id
+        %>"
+          />
         </form>
         <button><img src="./images/icon-edit.svg" alt="" />Edit</button>
         <% } else { %>
         <button><img src="./images/icon-reply.svg" alt="" />Reply</button>
         <% } %>
       </div>
-      <p><span>@<%= reply.replyingTo %></span> <%= reply.content %></p>
+      <p>
+        <span>@<%= reply.reply.replyingTo %></span> <%= reply.reply.content %>
+      </p>
     </div>
-    <% if (currentUser.username === reply.user.username) {%>
+    <% if (currentUser.username === reply.reply.user.username) {%>
     <div>
       <form
-        action="/edit/<%= reply.id %>?_method=PATCH"
+        action="/edit/<%= reply.reply._id %>?_method=PATCH"
         method="POST"
         name="editReply"
       >
         <img src="<%= currentUser.image.png %>" alt="" />
-        <label for="editReply<%= reply.id %>">Add a comment...</label>
+        <label for="editReply<%= reply.reply._id %>">Edit a reply...</label>
         <textarea
-          placeholder="Add a comment..."
-          id="editReply<%= reply.id %>"
+          placeholder="Edit a reply..."
+          id="editReply<%= reply.reply._id %>"
           name="commentContent"
         >
-<%= reply.content %></textarea
+<%= reply.reply.content %></textarea
         >
         <button type="submit">Send</button>
         <input
@@ -142,7 +187,6 @@
         <input type="hidden" name="formName" value="addComment" />
       </form>
     </div>
-
     <div class="attribution">
       Challenge by
       <a href="https://www.frontendmentor.io?ref=challenge" target="_blank"
