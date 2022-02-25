@@ -60,7 +60,7 @@ button {
 /* Main Styles */
 
 .main {
-  width: min(92%, 63rem);
+  width: min(92%, 73rem);
   margin: 3.25rem auto;
 }
 
@@ -79,7 +79,8 @@ button {
   position: relative;
 }
 
-.reply-form {
+.reply-form,
+.edit-form {
   display: none;
 }
 
@@ -96,6 +97,16 @@ button {
 .username {
   color: var(--dark-blue);
   font-weight: 500;
+}
+
+.current-user {
+  display: block;
+  background-color: var(--moderate-blue);
+  color: var(--white);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  line-height: 1;
 }
 
 .paragraph {
@@ -169,6 +180,7 @@ button {
   border: 1px solid var(--light-gray);
   border-radius: 10px;
   height: 9.5rem;
+  resize: none;
 }
 
 ::placeholder {

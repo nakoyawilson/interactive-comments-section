@@ -26,6 +26,9 @@
         <div class="details-wrapper">
           <img src="<%= comment.user.image.png %>" alt="" class="avatar" />
           <span class="username"><%= comment.user.username %></span>
+          <% if (currentUser.username === comment.user.username) {%>
+          <span class="current-user">you</span>
+          <% } %>
           <span><%= comment.createdAt %></span>
         </div>
         <p class="paragraph"><%= comment.content %></p>
@@ -39,7 +42,7 @@
               <img src="./images/icon-minus.svg" alt="" />
             </button>
           </div>
-          <div>
+          <div class="crud-wrapper">
             <% if (currentUser.username === comment.user.username) {%>
             <form
               action="/delete/<%= comment._id %>?_method=DELETE"
@@ -93,7 +96,7 @@
         </form>
       </div>
       <% if (currentUser.username === comment.user.username) {%>
-      <div class="card comment">
+      <div class="card comment edit-form">
         <form
           action="/edit/<%= comment._id %>?_method=PATCH"
           method="POST"
@@ -124,6 +127,9 @@
         <div class="details-wrapper">
           <img src="<%= reply.reply.user.image.png %>" alt="" class="avatar" />
           <span class="username"><%= reply.reply.user.username %></span>
+          <% if (currentUser.username === reply.reply.user.username) {%>
+          <span class="current-user">you</span>
+          <% } %>
           <span><%= reply.reply.createdAt %></span>
         </div>
         <p class="paragraph">
